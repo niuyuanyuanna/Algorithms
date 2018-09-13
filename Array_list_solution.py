@@ -95,35 +95,24 @@ def get_least_numbers(number_list, k):
     return ans
 
 
-def adjust_heap(number_list, i, k):
-    pa = i
-    child = 2 * i + 1
-    temp = number_list[i]
-    while child < k:
-        if child < k - 1 and number_list[child] < number_list[child + 1]:
-            child += 1
-        if number_list[pa] >= number_list[child]:
-            break
+def longest_subString_without_duplication(str):
+    str_list = list(str)
+    position_list = [-1] * 26
+    current_length = 0
+    max_length = current_length
+
+    for i in range(0, len(str_list)):
+        position_i = position_list[ord(str_list[i]) - ord('a')]
+        if position_i == -1 or i - position_i > current_length:
+            current_length += 1
         else:
-            number_list[pa] 
-    pass
-
-
-def get_least_numbers2(number_list, k):
-    """
-    时间复杂度为o(nlogk)适用于处理海量数据，不会改变输入list。最大堆处理方法
-    :param number_list:
-    :param k:
-    :return:
-    """
-    for i in range(k / 2)[::-1]:
-        adjust_heap(number_list, i, k)
-
-
-
-
+            current_length = i - position_i
+        position_list[ord(str_list[i]) - ord('a')] = i
+        if current_length > max_length:
+            max_length = current_length
+    return max_length
 
 
 if __name__ == '__main__':
-    number_list = [1,2,3,2,2,2,5,4,2]
-    more_than_half_num2(number_list)
+    str = 'arabcacfr'
+    longest_subString_without_duplication(str)

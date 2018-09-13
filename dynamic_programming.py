@@ -4,6 +4,7 @@
 # @Author  : NYY
 # @Site    : www.niuyuanyuanna.git.io
 # @File    : dynamic_programming.py
+import numpy as np
 
 
 def cutRod_BottomUp_withCost(price_list, length, cost):
@@ -22,7 +23,7 @@ def cutRod_BottomUp_withCost(price_list, length, cost):
     for i in range(length):
         q = 0
         # j表示前面一半钢材的长度固定为j时，查找后一半钢材长度的最优切割方法
-        for j in range(1, i+1):
+        for j in range(1, i + 1):
             if i == j:
                 temp = price_list[j]
             else:
@@ -76,8 +77,55 @@ def fibnacci_func(n):
     return result
 
 
+def longest_commom_subsequence(X, Y):
+    """
+    最长公共子序列，采用自底而上的方法，使用两个mn空间复杂度的matrix存储每个转移状态
+    :param X:
+    :param Y:
+    :return:
+    """
+    m = len(X) + 1
+    n = len(Y) + 1
+    c = np.zeros((m, n))
+    b = np.zeros((m - 1, n - 1))
+    X.insert(0, '0')
+    Y.insert(0, '0')
+    for i in range(1, m):
+        for j in range(1, n):
+            if X[i] == Y[j]:
+                c[i, j] = 1 + c[i - 1, j - 1]
+                b[i - 1, j - 1] = 1
+            elif c[i - 1, j] >= c[i, j - 1]:
+                c[i, j] = c[i - 1, j]
+                b[i - 1, j - 1] = 2
+            else:
+                c[i, j] = c[i, j - 1]
+                b[i - 1, j - 1] = 3
+    return c, b
+
+
+def print_LCS(b, X, i, j):
+    """
+    根据存储的b打印出最长子序列
+    :param b: 最长子序列的路线
+    :param X:
+    :param i:
+    :param j:
+    :return:
+    """
+    if i == 0 or j == 0:
+        return 0
+    if b[i][j] == 1:
+        print_LCS(b, X, i - 1, j - 1)
+        print(X[i])
+    elif b[i][j] == 2:
+        print_LCS(b, X, i - 1, j)
+    else:
+        print_LCS(b, X, i, j - 1)
+
+
 if __name__ == '__main__':
-    price_list = [0, 1, 5, 8, 9, 10, 17, 17, 20, 24, 30]
-    cost = 1
-    # print(cutRod_BottomUp_withCost(price_list, 9, cost))
-    print(memoized_cut_rod(price_list, 9))
+    X = ['A', 'B', 'C', 'B', 'D', 'A', 'B']
+    Y = ['B', 'D', 'C', 'A', 'B', 'A']
+    c, b = longest_commom_subsequence(X, Y)
+    print_LCS(b, X, len(X), len(Y))
