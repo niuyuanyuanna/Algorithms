@@ -219,6 +219,25 @@ def back_traverse(tree_root):
                 tmp = None
 
 
+def height(root):
+    if root is None:
+        return 0
+    height_left = height(root.left)
+    height_right = height(root.right)
+    if height_left > height_right:
+        return height_left + 1
+    else:
+        return height_right + 1
+
+
+def tree_distance(root):
+    if root is None:
+        return 0
+    if root.left is None and root.right is None:
+        return 0
+    dis = max(height(root.left) + height(root.right), tree_distance(root.left), tree_distance(root.right))
+    return dis
+
 
 if __name__ == '__main__':
     root_node = TreeNode(3)
@@ -229,4 +248,5 @@ if __name__ == '__main__':
     root_node.left.left.left = TreeNode(2)
     root_node.right.left = TreeNode(5)
     root_node.right.right = TreeNode(6)
-    pre_traverse(root_node)
+    # pre_traverse(root_node)
+    tree_distance(root_node)
