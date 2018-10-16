@@ -1,3 +1,5 @@
+import sys
+
 def insertion_sort(nums):
     """
     插入排序,时间复杂度为O(n^2)
@@ -46,4 +48,55 @@ def add_two_list(nums1, nums2):
         sum_len -= 1
     return nums_sum
 
+
+def chooseSort(nums):
+    i = 0
+    while i < len(nums):
+        min_index = i
+        for j in range(i + 1, len(nums)):
+            if nums[j] < nums[min_index]:
+                min_index = j
+        if min_index != i:
+            temp = nums[min_index]
+            nums[min_index] = nums[i]
+            nums[i] = temp
+        i += 1
+    return nums
+
+
+def merge(nums, p, q, r):
+    L = [nums[i] for i in range(p, q + 1)]
+    R = [nums[i] for i in range(q + 1, r + 1)]
+    L.append(sys.maxsize)
+    R.append(sys.maxsize)
+    i = 0
+    j = 0
+    for k in range(p, r + 1):
+        if L[i] < R[j]:
+            nums[k] = L[i]
+            i += 1
+        else:
+            nums[k] = R[j]
+            j += 1
+    return nums
+
+
+def mergeSort(nums, p, r):
+    if p < r:
+        q = int((p + r) / 2)
+        mergeSort(nums, p, q)
+        mergeSort(nums, q + 1, r)
+        merge(nums, p, q, r)
+    return nums
+
+
+if __name__ == '__main__':
+    nums = [10, 13, 9, 6, 8, 15, 2]
+    # nums = chooseSort(nums)
+    nums = mergeSort(nums, 0, len(nums) - 1)
+    print(nums)
+
+    # nums1 = [1, 5, 10, 13, 2, 4, 9, 15]
+    # nums1 = merge(nums1, 0, 4, len(nums1))
+    # print(nums1)
 
